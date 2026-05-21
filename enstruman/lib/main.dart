@@ -6,7 +6,7 @@ import 'screens/home_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Supabase bağlantısını senin anahtarınla başlattık
+  // Supabase bağlantısının nasıl yapılacağı için link
   await Supabase.initialize(
     url: 'https://ekjnrgnrhyudwrmmitrk.supabase.co',
     anonKey: 'sb_publishable_H9c94THVUJccurWiqAlETA_u7mGrsUM', 
@@ -20,7 +20,7 @@ class Uygulamam extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // HOCANIN ŞARTI: Aktif oturum var mı kontrol ediyoruz
+    //  Aktif oturum var mı kontrol etmek için ekledim bunu
     final session = Supabase.instance.client.auth.currentSession;
 
     return MaterialApp(
@@ -30,7 +30,7 @@ class Uygulamam extends StatelessWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.orange,
       ),
-      // Kullanıcı önceden giriş yaptıysa direkt ana sayfaya, yapmadıysa giriş ekranına gönderiyoruz
+    
       home: session != null ? const HomeScreen(rol: 'musteri') : const LoginScreen(),
     );
   }

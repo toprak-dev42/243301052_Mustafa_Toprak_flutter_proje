@@ -90,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 10),
                       
-                      // KISA VE ÖZ YENİ SAYFAYA GEÇİŞ BUTONU
+                      
                       TextButton.icon(
                         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const HakkimizdaScreen())),
                         icon: const Icon(Icons.info, color: Colors.grey, size: 20),

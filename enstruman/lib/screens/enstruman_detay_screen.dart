@@ -22,12 +22,12 @@ class _EnstrumanDetayScreenState extends State<EnstrumanDetayScreen> {
     _teklifleriGetir(); 
   }
 
-  // USTANIN İSMİNİ DE ÇEKEN GÜNCEL FONKSİYON
+ 
   Future<void> _teklifleriGetir() async {
     try {
       final int ilanId = int.parse(widget.ilan['id'].toString());
       
-      // 1. Önce bu ilana ait fiyat tekliflerini çekiyoruz
+      
       final List<dynamic> veriler = await Supabase.instance.client
           .from('ustanin_fiyatlari')
           .select()
@@ -36,13 +36,15 @@ class _EnstrumanDetayScreenState extends State<EnstrumanDetayScreen> {
 
       List<Map<String, dynamic>> tekliflerVeIsimler = [];
 
-      // 2. Her bir teklif için profiller tablosuna gidip ustanın adını buluyoruz
-      for (var teklif in veriler) {
+     
+      for (var t in veriler) {
+        Map<String, dynamic> teklif = Map<String, dynamic>.from(t);
         String ustaIsmi = "Bilinmeyen Usta"; 
+        
         try {
           final profil = await Supabase.instance.client
               .from('profiles')
-              .select('isim+soyisim') // DİKKAT: Eğer kayıt olurken veritabanına adını 'isim' değil de 'ad_soyad' diye kaydettiysen burayı değiştir!
+              .select('isim') 
               .eq('id', teklif['usta_id'])
               .maybeSingle();
 
@@ -50,13 +52,11 @@ class _EnstrumanDetayScreenState extends State<EnstrumanDetayScreen> {
             ustaIsmi = profil['isim'].toString();
           }
         } catch (e) {
-          // Hata olursa döngü kırılmasın diye boş bıraktım yoksa hata çıkıyo
+          
         }
 
-        tekliflerVeIsimler.add({
-          ...teklif,
-          'usta_ismi': ustaIsmi,
-        });
+        teklif['usta_ismi'] = ustaIsmi;
+        tekliflerVeIsimler.add(teklif);
       }
 
       setState(() {
@@ -128,11 +128,9 @@ class _EnstrumanDetayScreenState extends State<EnstrumanDetayScreen> {
                       return Card(
                         color: Colors.grey[800],
                         child: ListTile(
-                          // DOLAR İKONUNU tl ye çevirdik daha güzel görünsün diye
                           leading: const Icon(Icons.currency_lira, color: Colors.green), 
                           title: Text("${teklif['tespit_fiyati']} TL", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                          // USTANIN GERÇEK İSMİNİ BASTIĞIMIZ YER:
-                          subtitle: Text("${teklif['usta_ismi']} adlı ustanın teklifi", style: const TextStyle(color: Colors.orange)), 
+                          subtitle: Text("${teklif['usta_ismi']} adlı ustanın teklifi", style: const TextStyle(color: Colors.orange)),
                         ),
                       );
                     },

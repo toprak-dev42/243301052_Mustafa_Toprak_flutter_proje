@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       var query = Supabase.instance.client.from('enstrumanlar').select();
 
-      // Müşteri sadece kendi ilanlarını görür
+      
       if (widget.rol == 'musteri') {
         query = query.eq('musteri_id', user.id);
       }
@@ -50,9 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // YENİ EKLENEN: İLAN SİLME FONKSİYONU
+
   Future<void> _ilaniSil(int ilanId, String enstrumanAdi) async {
-    // Önce kullanıcıya "Emin misin?" diye soralım, yanlışlıkla basmasın
+    
     bool? onay = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -73,28 +73,27 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-    if (onay != true) return; // Kullanıcı iptal dediyse dur
+    if (onay != true) return; 
 
     setState(() => _yukleniyor = true);
     try {
       final user = Supabase.instance.client.auth.currentUser;
       if (user == null) return;
 
-      // 1. Veritabanından sil (GÜVENLİK: Sadece id'si ve musteri_id'si eşleşen silinir)
+     
       await Supabase.instance.client
           .from('enstrumanlar')
           .delete()
           .eq('id', ilanId)
-          .eq('musteri_id', user.id); // Başkası asla silemez!
-
-      // 2. Loglara not düş
+          .eq('musteri_id', user.id); 
+      
       await Supabase.instance.client.from('logs').insert({
         'user_id': user.id,
         'islem': 'Müşteri ilanını sildi: $enstrumanAdi',
       });
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("İlan başarıyla silindi!")));
-      _verileriGetir(); // Silindikten sonra listeyi anında yenile
+      _verileriGetir(); 
 
     } catch (hata) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Silme Hatası: $hata")));
@@ -216,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
-                                          // İŞTE BURASI: EĞER GİREN KİŞİ MÜŞTERİYSE KIRMIZI ÇÖP KUTUSU ÇIKAR
+                                          
                                           if (widget.rol == 'musteri')
                                             IconButton(
                                               onPressed: () => _ilaniSil(int.parse(ilan['id'].toString()), ilan['enstruman_adi'].toString()),

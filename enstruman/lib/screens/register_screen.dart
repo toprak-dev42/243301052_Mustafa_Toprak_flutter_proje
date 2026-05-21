@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() => _yukleniyor = true);
 
     try {
-      // Supabase Auth Sistemine Kayıt Atıyoruz
+   
       final AuthResponse res = await Supabase.instance.client.auth.signUp(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
@@ -35,14 +35,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final User? user = res.user;
 
       if (user != null) {
-        // SQL Veritabanına Profili mühürlüyoruz
+        
         await Supabase.instance.client.from('profiles').insert({
           'id': user.id,
           'full_name': _nameController.text.trim(),
           'role': _selectedRole,
         });
 
-        // Logs tablosuna işlem kaydı düşüyoruz
+        
         await Supabase.instance.client.from('logs').insert({
           'user_id': user.id,
           'islem': 'Yeni kullanıcı kaydı oluşturuldu. Rol: $_selectedRole',
@@ -58,9 +58,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     } catch (hata) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Kayıt sırasında bir durum oluştu, lütfen giriş yapmayı deneyin.")),
+          const SnackBar(content: Text("Kayıt sırasında bir durum oluştu, lütfen giriş yapmayı deneyin.")),
         );
-        // Eğer Auth oluşup SQL'de takıldıysa bile kullanıcıyı ana ekrana döndür ki giriş yapabilsin
+        
         Navigator.pop(context);
       }
     } finally {

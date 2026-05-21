@@ -31,14 +31,14 @@ class _EnstrumanEkleScreenState extends State<EnstrumanEkleScreen> {
          return;
       }
 
-      // 1. İlanı Supabase'e ekle
+      
       await Supabase.instance.client.from('enstrumanlar').insert({
         'musteri_id': user.id,
         'enstruman_adi': _cihazAdiController.text.trim(),
         'hasar_aciklamasi': _hasarController.text.trim(),
       });
 
-      // 2. Logs tablosuna kaydet
+     
       await Supabase.instance.client.from('logs').insert({
         'user_id': user.id,
         'islem': 'İlan eklendi: ${_cihazAdiController.text.trim()}',
@@ -48,12 +48,12 @@ class _EnstrumanEkleScreenState extends State<EnstrumanEkleScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Enstrüman başarıyla eklendi!")),
         );
-        // Ana sayfaya dön ve listeyi yenilemesini söyle
+        
         Navigator.pop(context, true); 
       }
     } catch (hata) {
       if (mounted) {
-        // Eğer veritabanı reddederse kırmızı kırmızı hatayı ekrana basacak
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Kayıt Hatası: ${hata.toString()}")),
         );

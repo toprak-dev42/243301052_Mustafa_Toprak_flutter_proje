@@ -11,7 +11,7 @@ class HakkimizdaScreen extends StatelessWidget {
         backgroundColor: Colors.orange,
         title: const Text("Uygulama Hakkında", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.black), // Geri dönüş okunun rengi
+        iconTheme: const IconThemeData(color: Colors.black), 
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
